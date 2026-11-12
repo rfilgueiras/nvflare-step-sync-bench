@@ -51,8 +51,11 @@ def main():
     p.add_argument("--precision", default="bf16-mixed", help="Lightning precision, e.g. 16-mixed on GPUs without bf16")
     p.add_argument("--results", default=os.path.join(ROOT, "results"))
     p.add_argument("--data-dir", default=os.path.join(ROOT, "data"))
+    p.add_argument("--model", help="quality only: Hugging Face ESM2 checkpoint, e.g. facebook/esm2_t30_150M_UR50D (default: 8M)")
     p.add_argument("--gpus", default="", help='one GPU group per site for the simulator, e.g. "0,1"; default: all sites share the visible GPUs')
     args = p.parse_args()
+    if args.model:
+        os.environ["ESM_MODEL"] = args.model
     args.results, args.data_dir = os.path.abspath(args.results), os.path.abspath(args.data_dir)
 
     exp, conf = args.experiment, CONFIG[args.experiment]

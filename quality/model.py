@@ -1,4 +1,5 @@
 import math
+import os
 
 import pytorch_lightning as pl
 import torch
@@ -8,7 +9,7 @@ from transformers import AutoModelForSequenceClassification, logging
 
 logging.set_verbosity_error()
 
-MODEL, CLASSES, PAD = "facebook/esm2_t6_8M_UR50D", 10, 1
+MODEL, CLASSES, PAD = os.environ.get("ESM_MODEL", "facebook/esm2_t6_8M_UR50D"), 10, 1
 
 
 class SeqData(Dataset):
