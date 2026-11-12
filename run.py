@@ -31,13 +31,14 @@ CONFIG = {
 
 def job_cmd(exp, spec, name, rep, cfg, run_dir, ws, args):
     common = ["--name", name, "--precision", args.precision, "--out", run_dir]
+    gpus = ["--gpus", args.gpus] if args.gpus else []
     if exp == "cost":
-        return ["job.py", *common, "--mode", spec["mode"], "--workers", str(spec["workers"]), "--samples", str(cfg["samples"]),
+        return ["job.py", *common, *gpus, "--mode", spec["mode"], "--workers", str(spec["workers"]), "--samples", str(cfg["samples"]),
                 "--n", str(cfg["n"]), "--rounds", str(cfg["rounds"]), "--ws", ws]
     q = ["--seed", str(rep), "--shuffle", str(spec["shuffle"]), "--data-dir", args.data_dir, "--test-limit", str(cfg["test_limit"])]
     if spec["mode"] == "C":
         return ["central.py", *common, *q, "--steps", str(2 * cfg["n"] * cfg["rounds"]), "--eval-every", str(2 * cfg["n"])]
-    return ["job.py", *common, *q, "--mode", spec["mode"], "--restore", str(spec["restore"]), f"--data={spec['data']}",
+    return ["job.py", *common, *gpus, *q, "--mode", spec["mode"], "--restore", str(spec["restore"]), f"--data={spec['data']}",
             "--n", str(cfg["n"]), "--rounds", str(cfg["rounds"]), "--ws", ws]
 
 
@@ -50,6 +51,7 @@ def main():
     p.add_argument("--precision", default="bf16-mixed", help="Lightning precision, e.g. 16-mixed on GPUs without bf16")
     p.add_argument("--results", default=os.path.join(ROOT, "results"))
     p.add_argument("--data-dir", default=os.path.join(ROOT, "data"))
+    p.add_argument("--gpus", default="", help='one GPU group per site for the simulator, e.g. "0,1"; default: all sites share the visible GPUs')
     args = p.parse_args()
     args.results, args.data_dir = os.path.abspath(args.results), os.path.abspath(args.data_dir)
 

@@ -13,6 +13,7 @@ from nvflare.recipe.sim_env import SimEnv
 
 p = argparse.ArgumentParser()
 p.add_argument("--name", required=True)
+p.add_argument("--gpus", default="")
 p.add_argument("--mode", choices=["A", "B"], required=True)
 p.add_argument("--shuffle", type=int, default=1)
 p.add_argument("--seed", type=int, default=0)
@@ -42,7 +43,7 @@ recipe = FedAvgRecipe(
     shutdown_timeout=30.0,
 )
 t0 = time.monotonic()
-recipe.execute(env=SimEnv(num_clients=2, num_threads=2, workspace_root=args.ws))
+recipe.execute(env=SimEnv(num_clients=2, num_threads=2, gpu_config=args.gpus or None, workspace_root=args.ws))
 job_wall = time.monotonic() - t0
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

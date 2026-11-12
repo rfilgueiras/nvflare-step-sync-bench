@@ -13,6 +13,7 @@ from nvflare.recipe.sim_env import SimEnv
 
 p = argparse.ArgumentParser()
 p.add_argument("--name", required=True)
+p.add_argument("--gpus", default="")
 p.add_argument("--mode", choices=["A", "B"], required=True)
 p.add_argument("--workers", type=int, default=2)
 p.add_argument("--samples", type=int, default=4096)
@@ -36,7 +37,7 @@ recipe = FedAvgRecipe(
     command=f"{sys.executable} -u",
     shutdown_timeout=30.0,
 )
-recipe.execute(env=SimEnv(num_clients=2, num_threads=2, workspace_root=args.ws))
+recipe.execute(env=SimEnv(num_clients=2, num_threads=2, gpu_config=args.gpus or None, workspace_root=args.ws))
 
 state = torch.load(glob.glob(f"{args.ws}/**/FL_global_model.pt", recursive=True)[0], map_location="cpu", weights_only=False)
 model = LitTransformer().eval()

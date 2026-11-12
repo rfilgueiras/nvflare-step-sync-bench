@@ -47,6 +47,9 @@ python run.py --experiment quality --variants A-once B-once --repeats 1   # one 
 
 Times are from the reference machine below; a data-centre GPU should be faster. Repeat k uses seed k.
 
+With two GPUs, add `--gpus 0,1` to give each simulated site its own GPU; by default both sites share the visible
+GPUs.
+
 Results go to `results/<experiment>[-smoke]/`:
 
 - `summary.md`: summary table
