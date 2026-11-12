@@ -21,7 +21,7 @@ Two experiments:
   data sorted by class; and a central baseline that sees the same number of samples.
 
 All jobs use the FedAvg recipe in the simulator with 2 sites, each site in an external process
-(`launch_external_process=True`) with `shutdown_timeout=30`. Both sites share one device.
+(`launch_external_process=True`) with `shutdown_timeout=30`. By default both sites share one device; see `--gpus`.
 
 ## Setup
 
