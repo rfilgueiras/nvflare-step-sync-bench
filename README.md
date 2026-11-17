@@ -63,6 +63,8 @@ Results go to `results/<experiment>[-smoke]/`:
 
 A finished run is skipped when you rerun; delete `runs/<run>` to run it again.
 
+`--n` and `--rounds` override the local steps per round and the number of FedAvg rounds.
+
 Other flags: `--results DIR`, `--data-dir DIR`, `--variants ...` (see `python run.py -h` and the lists at the
 top of `run.py`).
 
